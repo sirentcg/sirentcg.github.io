@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>blamedSiren — Blog Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Nunito:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --teal-deep:   #042a2b;
+    --teal-mid:    #065a5e;
+    --pink:        #f9a8d4;
+    --pink-bright: #fb7eb8;
+    --blue-cotton: #a5d8ff;
+    --blue-soft:   #bae6fd;
+    --white:       #f0faff;
+    --text-body:   #caf0f8;
+    --muted:       #7ab8c4;
+    --border:      rgba(165,216,255,0.15);
+    --glow-pink:   rgba(251,126,184,0.35);
+    --danger:      #f87171;
+    --success:     #6ee7b7;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--teal-deep); color: var(--text-body); font-family: 'Nunito', sans-serif; min-height: 100vh; }
+
+  header {
+    background: rgba(4,42,43,0.97);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+  .logo { font-family: 'Lobster', cursive; font-size: 1.5rem; color: var(--pink); text-decoration: none; text-shadow: 0 0 16px var(--glow-pink); }
+  .logo span { color: var(--blue-cotton); }
+  .header-right { display: flex; align-items: center; gap: 1rem; }
+  .admin-badge { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); border-radius: 50px; padding: 0.3rem 0.8rem; }
+
+  .admin-layout { display: grid; grid-template-columns: 1fr 400px; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+  .panel { background: rgba(165,216,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+  .panel-title { font-family: 'Lobster', cursive; font-size: 1.5rem; color: var(--pink); margin-bottom: 0.4rem; }
+  .panel-subtitle { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.5; font-weight: 300; }
+  .panel-subtitle strong { color: var(--blue-cotton); }
+
+  .form-group { margin-bottom: 1.2rem; }
+  label { display: block; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  input, select, textarea { width: 100%; background: rgba(4,42,43,0.6); border: 1px solid var(--border); border-radius: 10px; color: var(--text-body); font-family: 'Nunito', sans-serif; font-size: 0.95rem; padding: 0.7rem 1rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color: rgba(249,168,212,0.5); box-shadow: 0 0 0 3px rgba(249,168,212,0.08); }
+  select option { background: #042a2b; }
+  textarea { resize: vertical; line-height: 1.6; }
+  textarea.code { font-family: 'Space Mono', monospace; font-size: 0.75rem; min-height: 260px; color: var(--blue-soft); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .btn { font-family: 'Lobster', cursive; font-size: 1rem; padding: 0.65rem 1.5rem; border-radius: 50px; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: linear-gradient(135deg, var(--pink-bright), var(--pink)); color: var(--teal-deep); box-shadow: 0 4px 20px var(--glow-pink); width: 100%; justify-content: center; font-size: 1.05rem; }
+  .btn-primary:hover { box-shadow: 0 6px 28px var(--glow-pink); }
+  .btn-secondary { background: rgba(165,216,255,0.08); color: var(--blue-cotton); border: 1px solid rgba(165,216,255,0.2); width: 100%; justify-content: center; margin-top: 0.6rem; }
+  .btn-danger { background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.2); font-size: 0.75rem; padding: 0.35rem 0.8rem; font-family: 'Space Mono', monospace; border-radius: 8px; }
+  .btn-edit { background: rgba(165,216,255,0.08); color: var(--blue-cotton); border: 1px solid rgba(165,216,255,0.2); font-size: 0.75rem; padding: 0.35rem 0.8rem; font-family: 'Space Mono', monospace; border-radius: 8px; }
+  .btn-copy { background: rgba(110,231,183,0.1); color: var(--success); border: 1px solid rgba(110,231,183,0.25); width: 100%; justify-content: center; margin-top: 0.6rem; }
+
+  .posts-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .post-item { background: rgba(4,42,43,0.5); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; display: flex; align-items: flex-start; gap: 1rem; transition: border-color 0.2s; }
+  .post-item:hover { border-color: rgba(249,168,212,0.25); }
+  .post-item-info { flex: 1; min-width: 0; }
+  .post-item-title { font-family: 'Lobster', cursive; font-size: 1rem; color: var(--pink); margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .post-item-meta { display: flex; align-items: center; gap: 0.5rem; }
+  .tag-pill { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(249,168,212,0.1); color: var(--pink); border: 1px solid rgba(249,168,212,0.2); border-radius: 50px; padding: 0.15rem 0.5rem; }
+  .post-date-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); }
+  .post-item-actions { display: flex; gap: 0.4rem; align-items: center; flex-shrink: 0; }
+
+  .empty-state { text-align: center; padding: 2.5rem 1rem; font-style: italic; color: var(--muted); font-size: 0.9rem; }
+
+  .editing-banner { background: linear-gradient(135deg, rgba(251,126,184,0.1), rgba(165,216,255,0.06)); border: 1px solid rgba(249,168,212,0.3); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 1.2rem; font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--pink); letter-spacing: 0.08em; display: none; align-items: center; gap: 0.5rem; }
+  .editing-banner.show { display: flex; }
+
+  /* HOW IT WORKS */
+  .how-it-works { background: rgba(56,189,248,0.04); border: 1px solid rgba(165,216,255,0.15); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 1.5rem; }
+  .how-it-works h4 { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-cotton); margin-bottom: 0.8rem; }
+  .how-it-works ol { padding-left: 1.2rem; }
+  .how-it-works li { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.2rem; }
+  .how-it-works li strong { color: var(--text-body); }
+
+  .json-output-section { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .json-output-section h4 { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue-cotton); margin-bottom: 0.6rem; }
+
+  .count-badge { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); background: rgba(165,216,255,0.08); border: 1px solid var(--border); border-radius: 50px; padding: 0.2rem 0.6rem; margin-left: 0.5rem; }
+
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: rgba(6,90,94,0.97); border: 1px solid rgba(110,231,183,0.3); border-radius: 12px; padding: 0.9rem 1.4rem; color: var(--success); font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.05em; z-index: 999; transform: translateY(10px); opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { border-color: rgba(248,113,113,0.3); color: var(--danger); background: rgba(40,8,8,0.97); }
+
+  @media (max-width: 900px) { .admin-layout { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="blamedSiren.html" class="logo">blamed<span>Siren</span></a>
+  <div class="header-right">
+    <span class="admin-badge">✦ Blog Admin</span>
+  </div>
+</header>
+
+<div class="admin-layout">
+
+  <!-- LEFT: EDITOR -->
+  <div class="panel">
+    <h2 class="panel-title">✍️ Post Editor</h2>
+    <p class="panel-subtitle">
+      Write or edit posts here, then use the <strong>Export posts.json</strong> button on the right to get the updated file — paste it into your GitHub repo and push. That's it!
+    </p>
+
+    <div class="editing-banner" id="editingBanner">
+      ✏️ Editing: <strong id="editingTitle" style="margin-left:0.3rem"></strong>
+    </div>
+
+    <div class="form-group">
+      <label>Post Title *</label>
+      <input type="text" id="fieldTitle" placeholder="e.g. My Favourite Universus Combo"/>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category / Tag *</label>
+        <select id="fieldTag">
+          <option value="">— Select a tag —</option>
+          <option>Strategy</option>
+          <option>Meta</option>
+          <option>Pack Opening</option>
+          <option>Community</option>
+          <option>Lore</option>
+          <option>Tips</option>
+          <option>Tournament</option>
+          <option>Collection</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" id="fieldDate"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Excerpt (shown on the blog card) *</label>
+      <input type="text" id="fieldExcerpt" placeholder="One sentence summary of your post..."/>
+    </div>
+
+    <div class="form-group">
+      <label>Full Post Content *</label>
+      <textarea id="fieldContent" style="min-height:200px" placeholder="Write your full post here. Use blank lines between paragraphs."></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="btnSave">🌊 Add to Posts</button>
+    <button class="btn btn-secondary" id="btnCancel" style="display:none;">Cancel Edit</button>
+  </div>
+
+  <!-- RIGHT: POST LIST + EXPORT -->
+  <div>
+    <!-- HOW IT WORKS -->
+    <div class="panel" style="margin-bottom:1.5rem">
+      <div class="how-it-works">
+        <h4>🗺 How to Publish</h4>
+        <ol>
+          <li>Write your post in the editor and click <strong>Add to Posts</strong></li>
+          <li>Click <strong>Export posts.json</strong> below to copy the JSON</li>
+          <li>Open your GitHub repo, find <strong>posts.json</strong></li>
+          <li>Replace its contents with the copied JSON and commit</li>
+          <li>GitHub Pages rebuilds — your post is live! 🎉</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- POSTS LIST -->
+    <div class="panel" style="margin-bottom:1.5rem">
+      <h2 class="panel-title" style="margin-bottom:1rem">
+        📋 Posts
+        <span class="count-badge" id="postCount">0</span>
+      </h2>
+      <div class="posts-list" id="postsList"></div>
+
+      <div class="json-output-section">
+        <h4>Export posts.json</h4>
+        <textarea class="code" id="jsonOutput" readonly placeholder="Your JSON will appear here..."></textarea>
+        <button class="btn btn-copy" id="btnCopy">📋 Copy posts.json to Clipboard</button>
+        <button class="btn btn-secondary" id="btnReset" style="margin-top:0.5rem; color: var(--danger); border-color: rgba(248,113,113,0.2);">↺ Reset to Starter Posts</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const STORAGE_KEY = 'blamedSiren_posts';
+
+  const STARTER_POSTS = [
+    { id:1, title:"Building Your First Universus Deck", tag:"Strategy", date:"2026-02-10", excerpt:"New to Universus? Here's everything you need to know to build a competitive starter deck without breaking the bank.", content:"Starting out in Universus can feel overwhelming — there are so many cards, archetypes, and strategies to consider. But don't worry! The key to building your first deck is to keep it simple and focused.\n\nFirst, pick one character and build around their strengths. Don't try to mix too many themes early on. Second, make sure you have a solid foundation of control cards so you can respond to your opponent's plays. Third, look for budget-friendly staples that work in multiple archetypes — these will serve you well even as your collection grows.\n\nRemember: consistency beats raw power. A deck that does one thing really well will almost always outperform a deck that tries to do everything." },
+    { id:2, title:"The Current Meta Breakdown: Who's Winning?", tag:"Meta", date:"2026-02-05", excerpt:"A deep dive into the top performing archetypes right now and what they mean for the competitive scene.", content:"The Universus meta is always shifting, and right now we're in a really interesting spot. Aggressive rush decks are dominating at the local level, but at higher competitive play, control strategies are starting to push back.\n\nThe top archetypes right now are fast aggro builds that aim to close out the game by turn 5-6, mid-range value decks that grind out card advantage, and a few rogue combo builds that can win out of nowhere if left unchecked.\n\nIf you're heading to a local tournament soon, I'd recommend packing some extra removal in your sideboard to deal with the aggro matchup. The meta will likely shift again once the next set drops, so stay tuned!" },
+    { id:3, title:"Was the Latest Set Worth It? My Honest Review", tag:"Pack Opening", date:"2026-01-28", excerpt:"I opened 10 boxes so you don't have to. Here's what I pulled, what the odds look like, and if it's worth buying.", content:"I went all in on the latest Universus set so you don't have to — and here are my completely honest thoughts after opening 10 boxes.\n\nThe good news: the set has some genuinely exciting chase cards, and the artwork across the board is some of the best Universus has ever produced. The secret rares in particular are stunning.\n\nThe bad news: the pull rates on the top-tier cards feel lower than the last set. Out of 10 boxes I hit the main chase card only twice. If you're buying for the competitive cards specifically, singles are probably the smarter play right now.\n\nBottom line: great set for collectors, buyer beware for competitive grinders." },
+    { id:4, title:"Tournament Recap: What I Learned Going 5-2", tag:"Community", date:"2026-01-15", excerpt:"My full breakdown from last month's local tournament — the matchups, the misplays, and the lessons learned.", content:"Last weekend I took my current favourite deck to a local tournament and went 5-2, finishing in the top 8. Here's the full breakdown.\n\nRound 1-2: Won both against aggro decks. My control package held up really well and I was able to stabilise by turn 4 in both games.\n\nRound 3: Lost. Got matched against a combo deck I had barely tested against. Lesson learned — always research the field before an event.\n\nRounds 4-6: Won. Felt more in my groove and made cleaner decisions.\n\nRound 7: Lost in a very close game 3. One misplay on turn 6 probably cost me the match.\n\nOverall a great day. Lots to learn and I'll be back next month!" },
+    { id:5, title:"The Lore Behind My Favourite Universus Cards", tag:"Lore", date:"2025-12-20", excerpt:"Universus has some incredible world-building behind its artwork. Let's explore the deeper stories hiding in the cards.", content:"One of the things I love most about Universus is how much story is packed into the card artwork if you know where to look.\n\nTake some of the character cards — you can trace a character's journey across multiple sets just by looking at how their art evolves. The expression changes, the outfit shifts, the background tells a story of where they've been.\n\nThe world of Universus is rich with mythology and conflict that rarely get spelled out in the rules text but are very much there for players willing to dig in. I'll be posting a full lore series here on the blog over the coming months. Stay tuned!" },
+    { id:6, title:"5 Beginner Mistakes (And How to Avoid Them)", tag:"Tips", date:"2025-12-10", excerpt:"We all start somewhere. Here are the five most common beginner mistakes in Universus and how to fix them fast.", content:"Every Universus player makes these mistakes when they're starting out — including me!\n\n1. Overloading your deck with high-cost cards. You want a smooth curve, not a hand full of cards you can't play.\n\n2. Ignoring the resource system. Managing your resources each turn is one of the most important skills in the game.\n\n3. Not reading your opponent's cards. You need to know what threats exist in the format.\n\n4. Building too many decks at once. Focus on mastering one deck before branching out.\n\n5. Not having fun. Seriously — Universus is a game. Enjoy the journey and the wins will come." }
+  ];
+
+  // ── STATE ──
+  let editingId = null;
+
+  function getPosts() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [...STARTER_POSTS];
+  }
+
+  function savePosts(posts) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    updateJsonOutput(posts);
+    renderList(posts);
+  }
+
+  function nextId(posts) {
+    return posts.length > 0 ? Math.max(...posts.map(p => p.id)) + 1 : 1;
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── JSON OUTPUT ──
+  function updateJsonOutput(posts) {
+    document.getElementById('jsonOutput').value = JSON.stringify(posts, null, 2);
+    document.getElementById('postCount').textContent = posts.length;
+  }
+
+  document.getElementById('btnCopy').addEventListener('click', () => {
+    const json = document.getElementById('jsonOutput').value;
+    if (!json) { showToast('Nothing to copy yet.', true); return; }
+    navigator.clipboard.writeText(json).then(() => {
+      showToast('✓ Copied! Now paste into posts.json on GitHub.');
+    }).catch(() => {
+      document.getElementById('jsonOutput').select();
+      document.execCommand('copy');
+      showToast('✓ Copied!');
+    });
+  });
+
+  // ── RENDER LIST ──
+  function renderList(posts) {
+    const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const list = document.getElementById('postsList');
+    list.innerHTML = '';
+
+    if (sorted.length === 0) {
+      list.innerHTML = '<div class="empty-state">No posts yet. Write your first one!</div>';
+      return;
+    }
+
+    sorted.forEach(post => {
+      const item = document.createElement('div');
+      item.className = 'post-item';
+      item.innerHTML = `
+        <div class="post-item-info">
+          <div class="post-item-title">${escHtml(post.title)}</div>
+          <div class="post-item-meta">
+            <span class="tag-pill">${escHtml(post.tag)}</span>
+            <span class="post-date-label">${formatDate(post.date)}</span>
+          </div>
+        </div>
+        <div class="post-item-actions">
+          <button class="btn btn-edit" onclick="startEdit(${post.id})">Edit</button>
+          <button class="btn btn-danger" onclick="deletePost(${post.id})">Delete</button>
+        </div>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  // ── SAVE / UPDATE ──
+  document.getElementById('btnSave').addEventListener('click', () => {
+    const title   = document.getElementById('fieldTitle').value.trim();
+    const tag     = document.getElementById('fieldTag').value;
+    const date    = document.getElementById('fieldDate').value;
+    const excerpt = document.getElementById('fieldExcerpt').value.trim();
+    const content = document.getElementById('fieldContent').value.trim();
+
+    if (!title || !tag || !date || !excerpt || !content) {
+      showToast('⚠ Please fill in all fields.', true);
+      return;
+    }
+
+    const posts = getPosts();
+
+    if (editingId !== null) {
+      const idx = posts.findIndex(p => p.id === editingId);
+      if (idx !== -1) posts[idx] = { id: editingId, title, tag, date, excerpt, content };
+      showToast('✓ Post updated! Export JSON to publish.');
+    } else {
+      posts.push({ id: nextId(posts), title, tag, date, excerpt, content });
+      showToast('✓ Post added! Export JSON to publish.');
+    }
+
+    savePosts(posts);
+    clearForm();
+  });
+
+  // ── EDIT ──
+  function startEdit(id) {
+    const post = getPosts().find(p => p.id === id);
+    if (!post) return;
+    editingId = id;
+    document.getElementById('fieldTitle').value   = post.title;
+    document.getElementById('fieldTag').value     = post.tag;
+    document.getElementById('fieldDate').value    = post.date;
+    document.getElementById('fieldExcerpt').value = post.excerpt;
+    document.getElementById('fieldContent').value = post.content;
+    document.getElementById('btnSave').textContent = '💾 Save Changes';
+    document.getElementById('btnCancel').style.display = 'block';
+    document.getElementById('editingBanner').classList.add('show');
+    document.getElementById('editingTitle').textContent = post.title;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('btnCancel').addEventListener('click', clearForm);
+
+  function clearForm() {
+    editingId = null;
+    ['fieldTitle','fieldExcerpt','fieldContent'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('fieldTag').value  = '';
+    document.getElementById('fieldDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('btnSave').textContent = '🌊 Add to Posts';
+    document.getElementById('btnCancel').style.display = 'none';
+    document.getElementById('editingBanner').classList.remove('show');
+  }
+
+  // ── DELETE ──
+  function deletePost(id) {
+    const post = getPosts().find(p => p.id === id);
+    if (!post) return;
+    if (!confirm(`Delete "${post.title}"?\n\nRemember to export and push posts.json after.`)) return;
+    const updated = getPosts().filter(p => p.id !== id);
+    if (editingId === id) clearForm();
+    savePosts(updated);
+    showToast('✓ Deleted. Export JSON to publish the change.');
+  }
+
+  // ── RESET ──
+  document.getElementById('btnReset').addEventListener('click', () => {
+    if (!confirm('Reset to the 6 starter posts? Any custom posts will be lost.')) return;
+    savePosts([...STARTER_POSTS]);
+    clearForm();
+    showToast('✓ Reset to starter posts.');
+  });
+
+  // ── INIT ──
+  document.getElementById('fieldDate').value = new Date().toISOString().split('T')[0];
+  const initial = getPosts();
+  savePosts(initial); // renders list + JSON output
+</script>
+</body>
+</html>

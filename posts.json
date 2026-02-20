@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Building Your First Universus Deck",
+    "tag": "Strategy",
+    "date": "2026-02-10",
+    "excerpt": "New to Universus? Here's everything you need to know to build a competitive starter deck without breaking the bank.",
+    "content": "Starting out in Universus can feel overwhelming — there are so many cards, archetypes, and strategies to consider. But don't worry! The key to building your first deck is to keep it simple and focused.\n\nFirst, pick one character and build around their strengths. Don't try to mix too many themes early on. Second, make sure you have a solid foundation of control cards so you can respond to your opponent's plays. Third, look for budget-friendly staples that work in multiple archetypes — these will serve you well even as your collection grows.\n\nRemember: consistency beats raw power. A deck that does one thing really well will almost always outperform a deck that tries to do everything."
+  },
+  {
+    "id": 2,
+    "title": "The Current Meta Breakdown: Who's Winning?",
+    "tag": "Meta",
+    "date": "2026-02-05",
+    "excerpt": "A deep dive into the top performing archetypes right now and what they mean for the competitive scene.",
+    "content": "The Universus meta is always shifting, and right now we're in a really interesting spot. Aggressive rush decks are dominating at the local level, but at higher competitive play, control strategies are starting to push back.\n\nThe top archetypes right now are fast aggro builds that aim to close out the game by turn 5-6, mid-range value decks that grind out card advantage, and a few rogue combo builds that can win out of nowhere if left unchecked.\n\nIf you're heading to a local tournament soon, I'd recommend packing some extra removal in your sideboard to deal with the aggro matchup. The meta will likely shift again once the next set drops, so stay tuned!"
+  },
+  {
+    "id": 3,
+    "title": "Was the Latest Set Worth It? My Honest Review",
+    "tag": "Pack Opening",
+    "date": "2026-01-28",
+    "excerpt": "I opened 10 boxes so you don't have to. Here's what I pulled, what the odds look like, and if it's worth buying.",
+    "content": "I went all in on the latest Universus set so you don't have to — and here are my completely honest thoughts after opening 10 boxes.\n\nThe good news: the set has some genuinely exciting chase cards, and the artwork across the board is some of the best Universus has ever produced. The secret rares in particular are stunning.\n\nThe bad news: the pull rates on the top-tier cards feel lower than the last set. Out of 10 boxes I hit the main chase card only twice. If you're buying for the competitive cards specifically, singles are probably the smarter play right now.\n\nBottom line: great set for collectors, buyer beware for competitive grinders."
+  },
+  {
+    "id": 4,
+    "title": "Tournament Recap: What I Learned Going 5-2",
+    "tag": "Community",
+    "date": "2026-01-15",
+    "excerpt": "My full breakdown from last month's local tournament — the matchups, the misplays, and the lessons learned.",
+    "content": "Last weekend I took my current favourite deck to a local tournament and went 5-2, finishing in the top 8. Here's the full breakdown.\n\nRound 1-2: Won both against aggro decks. My control package held up really well and I was able to stabilise by turn 4 in both games.\n\nRound 3: Lost. Got matched against a combo deck I had barely tested against and got caught completely off guard. Lesson learned — always research the field before an event.\n\nRounds 4-6: Won. Felt more in my groove and made cleaner decisions.\n\nRound 7: Lost in a very close game 3. One misplay in turn 6 probably cost me the match — I attacked into a card I should have played around.\n\nOverall a great day. Lots to learn and I'll be back next month!"
+  },
+  {
+    "id": 5,
+    "title": "The Lore Behind My Favourite Universus Cards",
+    "tag": "Lore",
+    "date": "2025-12-20",
+    "excerpt": "Universus has some incredible world-building behind its artwork. Let's explore some of the deeper stories hiding in the cards.",
+    "content": "One of the things I love most about Universus is how much story is packed into the card artwork if you know where to look.\n\nTake some of the character cards — you can trace a character's journey across multiple sets just by looking at how their art evolves. The expression changes, the outfit shifts, the background tells a story of where they've been.\n\nThe world of Universus is rich with mythology, conflict, and character relationships that rarely get spelled out in the rules text but are very much there for players willing to dig in. I've been doing a deep dive lately and I'll be posting a full lore series here on the blog over the coming months. Stay tuned!"
+  },
+  {
+    "id": 6,
+    "title": "5 Beginner Mistakes (And How to Avoid Them)",
+    "tag": "Tips",
+    "date": "2025-12-10",
+    "excerpt": "We all start somewhere. Here are the five most common beginner mistakes in Universus and how to fix them fast.",
+    "content": "Every Universus player makes these mistakes when they're starting out — including me! Here's how to skip past them.\n\n1. Overloading your deck with high-cost cards. You want a smooth curve, not a hand full of cards you can't play.\n\n2. Ignoring the resource system. Managing your resources each turn is one of the most important skills in the game. Don't blow everything turn one.\n\n3. Not reading your opponent's cards. You need to know what threats exist in the format. Ignorance is not bliss at the card table.\n\n4. Building too many decks at once. Focus on mastering one deck before branching out. You'll learn the game much faster.\n\n5. Not having fun. Seriously — Universus is a game. Enjoy the journey, enjoy the community, and the wins will come."
+  }
+]
