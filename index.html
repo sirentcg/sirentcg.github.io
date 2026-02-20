@@ -398,7 +398,7 @@
     .then(r => { if (!r.ok) throw new Error(); return r.json(); })
     .then(posts => { allPosts = posts; renderBlog(posts); })
     .catch(() => {
-      document.getElementById('blogEmpty').textContent = 'Posts unavailable. Please view on the live site.';
+      document.getElementById('blogEmpty').textContent = 'No posts yet. Check back soon!';
       document.getElementById('blogEmpty').style.display = 'block';
     });
 </script>
